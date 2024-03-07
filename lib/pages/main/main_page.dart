@@ -37,6 +37,13 @@ class MainPage extends StatelessWidget {
               },
               child: const Text('Left right bars'),
             ),
+            gapH4,
+            ElevatedButton(
+              onPressed: () {
+                context.router.push(const ChartRoute());
+              },
+              child: const Text('Chart'),
+            ),
           ],
         ),
       ),

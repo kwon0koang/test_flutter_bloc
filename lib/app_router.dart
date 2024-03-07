@@ -10,5 +10,6 @@ class AppRouter extends $AppRouter {
     AutoRoute(path: '/', page: MainRoute.page),
     AutoRoute(page: CounterRoute.page),
     AutoRoute(page: CubitCounterRoute.page),
+    AutoRoute(page: LeftRightBarsRoute.page),
   ];
 }

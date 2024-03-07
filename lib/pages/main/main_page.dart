@@ -30,6 +30,13 @@ class MainPage extends StatelessWidget {
               },
               child: const Text('Counter with cubit'),
             ),
+            gapH4,
+            ElevatedButton(
+              onPressed: () {
+                context.router.push(const LeftRightBarsRoute());
+              },
+              child: const Text('Left right bars'),
+            ),
           ],
         ),
       ),

@@ -74,7 +74,7 @@ class _BarsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = _getDeviceWidth(context);
-    final maxBarWidth = deviceWidth / 2 / 2;
+    final maxBarWidth = deviceWidth / 2 * 6 / 8;
     return Container(
       color: Colors.green,
       child: ListView.builder(
@@ -85,9 +85,9 @@ class _BarsWidget extends StatelessWidget {
           final right = myLeftRight.right;
           final maxLeftRight = _getMaxLeftRight(myLeftRights);
 
-          final calculatedMyLeftRight = _MyLeftRight(
-              maxBarWidth * left / maxLeftRight,
-              maxBarWidth * right / maxLeftRight);
+          final calculatedMyLeftRight = _MyLeftRight(left, right,
+              leftBarWidth: maxBarWidth * left / maxLeftRight,
+              rightBarWidth: maxBarWidth * right / maxLeftRight);
 
           Log.d(
               'maxBarWidth : $maxBarWidth / index : $index / myLeftRight.left : ${myLeftRight.left} / myLeftRight.right : ${myLeftRight.right} / calculatedMyLeftRight.left : ${calculatedMyLeftRight.left} / calculatedMyLeftRight.right : ${calculatedMyLeftRight.right}');
@@ -133,26 +133,44 @@ class _BarWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: myLeftRight.left.toDouble(),
-                  height: 20,
-                  color: Colors.red,
+                const Text('aaa'),
+                Stack(
+                  alignment: Alignment.centerRight,
+                  children: [
+                    Container(
+                      width: myLeftRight.leftBarWidth.toDouble(),
+                      height: 20,
+                      color: Colors.red,
+                    ),
+                    Text(
+                      _getInt(myLeftRight.left).toString(),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  width: myLeftRight.right.toDouble(),
-                  height: 20,
-                  color: Colors.blue,
+                Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    Container(
+                      width: myLeftRight.rightBarWidth.toDouble(),
+                      height: 20,
+                      color: Colors.blue,
+                    ),
+                    Text(
+                      _getInt(myLeftRight.right).toString(),
+                    ),
+                  ],
                 ),
+                const Text('bbb'),
               ],
             ),
           ),
@@ -160,13 +178,25 @@ class _BarWidget extends StatelessWidget {
       ),
     );
   }
+
+  // double 소수점 다 없애고 int 반환
+  _getInt(double value) {
+    if (value % 2 == 0) {
+      return value.toInt();
+    } else {
+      return value.toInt() + 1;
+    }
+  }
 }
 
 class _MyLeftRight {
   double left;
   double right;
+  double leftBarWidth;
+  double rightBarWidth;
 
-  _MyLeftRight(this.left, this.right);
+  _MyLeftRight(this.left, this.right,
+      {this.leftBarWidth = 0, this.rightBarWidth = 0});
 }
 
 abstract class CounterEvent {}

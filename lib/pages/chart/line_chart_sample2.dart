@@ -7,13 +7,14 @@ class LineChartSample2 extends StatelessWidget {
 
   final List<Color> gradientColors = [
     Colors.red,
-    Colors.lime,
+    Colors.white,
   ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.grey,
+      padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+      color: Colors.grey.withOpacity(0.3),
       child: AspectRatio(
         aspectRatio: 1.70,
         child: Padding(
@@ -99,7 +100,7 @@ class LineChartSample2 extends StatelessWidget {
         getDrawingHorizontalLine: (value) {
           return const FlLine(
             color: Colors.orange,
-            dashArray: [5, 10],
+            dashArray: [10, 5],
             strokeWidth: 3,
           );
         },
@@ -135,27 +136,69 @@ class LineChartSample2 extends StatelessWidget {
           ),
         ),
       ),
-//       extraLinesData: ExtraLinesData(
-// //         extraLinesOnTop: true,
-//         horizontalLines: [
-//           HorizontalLine(
-//             y: 5,
-//             color: Colors.orange,
-//             strokeWidth: 2,
-//             dashArray: [5, 10],
-//             label: HorizontalLineLabel(
-//               show: true,
-//               alignment: Alignment.topRight,
-//               padding: const EdgeInsets.only(right: 5, bottom: 5),
-//               style: const TextStyle(
-//                 fontSize: 9,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//               // labelResolver: (line) => 'H: ${line.y}',
-//             ),
-//           ),
-//         ],
-//       ),
+      extraLinesData: ExtraLinesData(
+        extraLinesOnTop: true,
+        // horizontalLines: [
+        //   HorizontalLine(
+        //     y: 7,
+        //     color: Colors.purple,
+        //     strokeWidth: 2,
+        //     dashArray: [10, 5],
+        //     label: HorizontalLineLabel(
+        //       show: true,
+        //       alignment: Alignment.topRight,
+        //       padding: const EdgeInsets.all(5),
+        //       style: const TextStyle(
+        //         fontSize: 9,
+        //         fontWeight: FontWeight.bold,
+        //         backgroundColor: Colors.red,
+        //         color: Colors.white,
+        //       ),
+        //       labelResolver: (line) => 'y : ${line.y}',
+        //     ),
+        //   ),
+        // ],
+        verticalLines: [
+          VerticalLine(
+            x: _getX(_getMaxY()),
+            color: Colors.purple,
+            strokeWidth: 2,
+            dashArray: [10, 5],
+            label: VerticalLineLabel(
+              show: true,
+              alignment: Alignment.topRight,
+              padding: const EdgeInsets.all(5),
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                backgroundColor: Colors.green,
+                color: Colors.white,
+              ),
+              labelResolver: (line) =>
+                  '↑ x : ${line.x} / y : ${_spots.where((spot) => spot.x == line.x).firstOrNull?.y}',
+            ),
+          ),
+          VerticalLine(
+            x: _getX(_getMinY()),
+            color: Colors.purple,
+            strokeWidth: 2,
+            dashArray: [10, 5],
+            label: VerticalLineLabel(
+              show: true,
+              alignment: Alignment.bottomRight,
+              padding: const EdgeInsets.all(5),
+              style: const TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.bold,
+                backgroundColor: Colors.green,
+                color: Colors.white,
+              ),
+              labelResolver: (line) =>
+                  '↓ x : ${line.x} / y : ${_spots.where((spot) => spot.x == line.x).firstOrNull?.y}',
+            ),
+          ),
+        ],
+      ),
       lineTouchData: LineTouchData(
         handleBuiltInTouches: true,
         // getTouchLineStart: (LineChartBarData barData, int spotIndex) {
@@ -194,7 +237,7 @@ class LineChartSample2 extends StatelessWidget {
                 const FlLine(
                   color: Colors.green,
                   strokeWidth: 5,
-                  dashArray: [5, 10],
+                  dashArray: [10, 5],
                 ),
                 FlDotData(
                   getDotPainter: (spot, percent, barData, index) =>
@@ -207,8 +250,18 @@ class LineChartSample2 extends StatelessWidget {
             },
           ).toList();
         },
-        touchTooltipData: const LineTouchTooltipData(
-          tooltipBgColor: Colors.orange, //.withOpacity(0.8),
+        touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: Colors.grey, //.withOpacity(0.8),
+          getTooltipItems: (touchedSpots) {
+            return touchedSpots
+                .map(
+                  (spot) => LineTooltipItem(
+                    '${spot.y}',
+                    const TextStyle(color: Colors.white),
+                  ),
+                )
+                .toList();
+          },
         ),
       ),
       borderData: FlBorderData(
@@ -224,54 +277,98 @@ class LineChartSample2 extends StatelessWidget {
       maxX: 100,
       minY: 0,
       maxY: 10,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3),
-            FlSpot(2.6, 2),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
-            FlSpot(20, 3),
-            FlSpot(30, 5),
-            FlSpot(40, 9),
-            FlSpot(50, 8),
-            FlSpot(60, 6),
-            FlSpot(70, 3.1),
-            FlSpot(80, 4),
-            FlSpot(90, 3),
-            FlSpot(100, 9.5),
-          ],
-          isCurved: true,
+      lineBarsData: _lineBarsData,
+    );
+  }
+
+  List<LineChartBarData> get _lineBarsData {
+    return [
+      LineChartBarData(
+        spots: _spots,
+        isCurved: true,
+        // gradient: LinearGradient(
+        //   colors: gradientColors,
+        // ),
+        color: Colors.blue,
+        barWidth: 3,
+        isStrokeCapRound: true,
+        dotData: const FlDotData(
+          show: false,
+        ),
+        belowBarData: BarAreaData(
+          show: true,
           // gradient: LinearGradient(
-          //   colors: gradientColors,
+          //   colors: gradientColors
+          //       // .map((color) => color.withOpacity(0.3))
+          //       .toList(),
           // ),
-          color: Colors.blue,
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            // gradient: LinearGradient(
-            //   colors: gradientColors
-            //       // .map((color) => color.withOpacity(0.3))
-            //       .toList(),
-            // ),
-            gradient: LinearGradient(
-              colors: gradientColors
-                  // .map((color) => color.withOpacity(0.3))
-                  .toList(),
-              stops: const [0.5, 1.0],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
+          gradient: LinearGradient(
+            colors: gradientColors
+                // .map((color) => color.withOpacity(0.3))
+                .toList(),
+            // stops: const [0.0, 1.0],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
-      ],
-    );
+      ),
+    ];
+  }
+
+  List<FlSpot> get _spots {
+    return const [
+      FlSpot(0, 3),
+      FlSpot(2.6, 2),
+      FlSpot(4.9, 5),
+      FlSpot(6.8, 3.1),
+      FlSpot(8, 4),
+      FlSpot(9.5, 3),
+      FlSpot(11, 4),
+      FlSpot(20, 3),
+      FlSpot(30, 5),
+      FlSpot(40, 9.5),
+      FlSpot(50, 8),
+      FlSpot(60, 6),
+      FlSpot(70, 3.1),
+      FlSpot(80, 4),
+      FlSpot(90, 3),
+      FlSpot(100, 7),
+    ];
+  }
+
+  // _spots에서 y 최대값 구하는 함수
+  double _getMaxY() {
+    double maxY = 0;
+    for (int i = 0; i < _spots.length; i++) {
+      if (_spots[i].y > maxY) {
+        maxY = _spots[i].y;
+      }
+    }
+    Log.d('maxY : $maxY');
+    return maxY;
+  }
+
+  // _spots에서 y 최소값 구하는 함수
+  double _getMinY() {
+    double minY = 99999999999;
+    for (int i = 0; i < _spots.length; i++) {
+      if (_spots[i].y < minY) {
+        minY = _spots[i].y;
+      }
+    }
+    Log.d('minY : $minY');
+    return minY;
+  }
+
+  // y값으로 _spots 에서 x값 찾는 함수
+  double _getX(double y) {
+    double x = 0;
+    for (int i = 0; i < _spots.length; i++) {
+      if (_spots[i].y == y) {
+        x = _spots[i].x;
+      }
+    }
+    Log.d('x : $x');
+    return x;
   }
 }

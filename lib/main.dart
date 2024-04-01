@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:test_flutter_bloc/app_router.dart';
 import 'package:test_flutter_bloc/pages/counter/counter_page.dart';
 
@@ -43,9 +45,22 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ThemeCubit(),
-      child: const AppView(),
+    final dio = Dio();
+    dio.interceptors.add(PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90));
+
+    return RepositoryProvider(
+      create: (_) => dio,
+      child: BlocProvider(
+        create: (_) => ThemeCubit(),
+        child: const AppView(),
+      ),
     );
   }
 }

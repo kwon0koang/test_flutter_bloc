@@ -1,11 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_flutter_bloc/common/async_value.dart';
 import 'package:test_flutter_bloc/network/random_user_client.dart';
+import 'package:test_flutter_bloc/pages/random_user/random_user_event.dart';
 import 'package:test_flutter_bloc/pages/random_user/random_user_state.dart';
-
-abstract class RandomUserEvent {}
-
-class GetRandomUser extends RandomUserEvent {}
 
 class RandomUserBloc extends Bloc<RandomUserEvent, RandomUserState> {
   final RandomUserClient _randomUserClient;

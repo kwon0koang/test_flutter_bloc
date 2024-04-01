@@ -8,6 +8,7 @@ import 'package:test_flutter_bloc/common/async_value.dart';
 import 'package:test_flutter_bloc/model/random_user_model.dart';
 import 'package:test_flutter_bloc/network/random_user_client.dart';
 import 'package:test_flutter_bloc/pages/random_user/random_user_bloc.dart';
+import 'package:test_flutter_bloc/pages/random_user/random_user_event.dart';
 import 'package:test_flutter_bloc/pages/random_user/random_user_state.dart';
 
 @RoutePage()

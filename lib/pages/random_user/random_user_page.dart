@@ -20,13 +20,13 @@ class RandomUserPage extends StatelessWidget {
     final randomUserClient = RandomUserClient(dio);
     return BlocProvider(
       create: (_) => RandomUserBloc(randomUserClient: randomUserClient),
-      child: const RandomUserView(),
+      child: const _RandomUserView(),
     );
   }
 }
 
-class RandomUserView extends StatelessWidget {
-  const RandomUserView({super.key});
+class _RandomUserView extends StatelessWidget {
+  const _RandomUserView({super.key});
 
   @override
   Widget build(BuildContext context) {

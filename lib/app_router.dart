@@ -13,5 +13,6 @@ class AppRouter extends $AppRouter {
     AutoRoute(page: LeftRightBarsRoute.page),
     AutoRoute(page: ChartRoute.page),
     AutoRoute(page: RandomUserRoute.page),
+    AutoRoute(page: BottomNavigationRoute.page),
   ];
 }
